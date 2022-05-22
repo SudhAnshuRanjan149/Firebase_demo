@@ -1,0 +1,23 @@
+.page{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+
+.signup_body{
+  display: flex;
+  flex-direction: column;
+  background-color: aqua;
+  width: 20rem;
+
+  .form{
+    display:flex;
+    justify-content: space-between;
+    margin: .5rem;
+  }
+  button{
+    margin: .5rem;
+  }
+}
+}
