@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./SignUp.scss";
 import { useHistory } from "react-router-dom";
-import { auth } from "./../Firebase/firebase.js";
-import { signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "./../Firebase/firebase.js";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import SignOut from "./SignOut";
+import { collection, addDoc } from "firebase/firestore";
 
 const SignUp = () => {
   const history = useHistory();
@@ -16,8 +17,9 @@ const SignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user1 = userCredential.user;
-        console.log("user --> ", user1);
+        const user = userCredential.user;
+        setUser(user);
+        adduser(user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -26,16 +28,24 @@ const SignUp = () => {
       });
   };
 
-  // const signout = () => {
-  //   signOut(auth);
-  // };
+  const adduser = async (user) => {
+    try {
+      const docRef = await addDoc(collection(db, "users"), {
+        email: user.email,
+        uid: user.uid
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setUser(user);
-      console.log("user data --> ", user);
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     setUser(user);
+  //     adduser(user);
+  //   });
+  // }, []);
 
   return (
     <>
